@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+    <form method="post" action="{% url 'users:sign-in' %}">
+        {% csrf_token %}
+        <div class="container">
+            <h1>Sign In</h1>
+            <p>Please fill in this form to Sign In.</p>
+            <hr>
+
+            <label for="email"><b>Email</b></label>
+            {{ form.username }}
+
+            <label for="psw"><b>Password</b></label>
+            {{ form.password }}
+
+            <hr>
+            <button type="submit" class="register btn">Sing In</button>
+        </div>
+
+        <div class="container signin">
+            <p>Don't have an account? <a href="{% url 'users:home' %}">Sign Up</a></p>
+        </div>
+    </form>
+
+{% endblock %}
+
+
+
+

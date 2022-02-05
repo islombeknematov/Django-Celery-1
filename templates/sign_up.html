@@ -1,7 +1,8 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-    <form>
+    <form method="post" action="{% url 'users:home' %}">
+        {% csrf_token %}
         <div class="container">
             <h1>Sign Up</h1>
             <p>Please Fill in this form to create an account.</p>
@@ -16,12 +17,12 @@
             <label for="psw-repeat"><b>Repeat Password</b></label>
             {{ form.password2 }}
             <hr>
-            <button type="submit" class="registerbtn">Sign Up</button>
+            <button type="submit" class="register btn">Sign Up</button>
         </div>
 
         <div class="container signin">
 
-            <p>Already have an account? <a href="{% url 'sign-in' %}">Sign In</a></p>
+            <p>Already have an account? <a href="{% url 'users:sign-in' %}">Sign In</a></p>
 
         </div>
     </form>
