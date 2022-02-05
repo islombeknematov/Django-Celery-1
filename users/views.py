@@ -70,5 +70,3 @@ class AccountTemplateView(TemplateView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-# celery -A Django_Celery.celery worker --pool=solo -l info
-# celery -A Django_Celery.celery beat -l INFO
