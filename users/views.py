@@ -9,15 +9,27 @@ from django.contrib.auth.decorators import login_required
 
 from users.decorators import login_forbidden
 
+from users.tasks import create_email
+
 
 class SignUpFormView(FormView):
     template_name = 'sign_up.html'
     form_class = UserForm
-    success_url = 'users:account'
+    success_url = '/account/'
 
     def form_valid(self, form):
         obj = form.save()
         login(self.request, obj)
+
+        # This is a Celery task
+        create_email.delay(
+            user_id=obj.id,  # user ID - this must be added
+            email_account="Do not reply",  # the email account being used
+            subject=obj.username,  # who to mail
+            cc=[],
+            template="hello.html",  # template to be used
+        )
+        # End Celery task
         return super().form_valid(form)
 
     @method_decorator(login_forbidden)
@@ -28,7 +40,7 @@ class SignUpFormView(FormView):
 class SignInFormView(FormView):
     template_name = 'sign_in.html'
     form_class = AuthForm
-    success_url = 'users:account'
+    success_url = '/account/'
 
     def form_valid(self, form):
         username = form.cleaned_data['username']
@@ -57,3 +69,6 @@ class AccountTemplateView(TemplateView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
+
+# celery -A Django_Celery.celery worker --pool=solo -l info
+# celery -A Django_Celery.celery beat -l INFO

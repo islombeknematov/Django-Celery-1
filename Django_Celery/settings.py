@@ -123,9 +123,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://redis:6379")
 if CELERY_RESULT_BACKEND == 'django-db':
-    INSTALLED_APPS += ['django_celery_results', ]
+    INSTALLED_APPS += ['django_celery_results',]
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Europe/London'
+CELERY_TIMEZONE = 'Asia/Tashkent'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
+# email settings for gmail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get("DONOT_REPLY_EMAIL")
+DISPLAY_NAME = "Did coding"
+DONOT_REPLY_EMAIL_PASSWORD = os.environ.get("DONOT_REPLY_EMAIL_PASSWORD")
+

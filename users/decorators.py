@@ -8,6 +8,7 @@ def login_forbidden(function):
     Decorator for views that checks that user is NOT logged in,
     redirecting to the home page if necessary.
     """
+
     @wraps(function)
     def wrap(request, *args, **kwargs):
         u = request.user
@@ -17,9 +18,3 @@ def login_forbidden(function):
         return function(request, *args, **kwargs)
 
     return wrap
-
-
-
-
-
-
