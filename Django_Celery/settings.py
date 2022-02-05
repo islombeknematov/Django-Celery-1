@@ -6,7 +6,6 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = int(os.environ.get("DEBUG", default=0))
 PRODUCTION = int(os.environ.get("PRODUCTION", default=1))
@@ -37,6 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'users',
+
+    'django_celery_beat',
+
 ]
 
 MIDDLEWARE = [
@@ -111,4 +113,19 @@ STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+LOGIN_REDIRECT_URL = 'users:account'
+LOGIN_URL = 'users:sign-in'
+LOGOUT_REDIRECT_URL = 'users:sign-in'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Celery, Celery Beat and Redis settings
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://redis:6379")
+if CELERY_RESULT_BACKEND == 'django-db':
+    INSTALLED_APPS += ['django_celery_results', ]
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/London'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
